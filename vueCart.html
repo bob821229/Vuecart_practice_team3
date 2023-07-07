@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="vueCart.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="wrap">
+        <h1>食物箱</h1>
+        <div  class="empty_box"   v-show="food.length === 0">
+          <img src="images/empty_box.png" alt="">
+          <h1>箱子裡沒有食物</h1>
+        </div>
+        <div class="container">
+          <ul
+            class="item_container"
+            v-for="(item, index) in food"
+            :key="item.index"
+          >
+            <li class="item_body">
+              <div class="item_detail">
+                <img :src="item.imgUrl" />
+                <div class="name">{{ item.itemName }}</div>
+              </div>
+              <div class="price">單價<span>$</span>{{ item.price }}</div>
+              <div class="count">
+                <button @click="handleSub(item)">-</button>
+                {{ item.count }}
+                <button @click="handlePlus(item)">+</button>
+              </div>
+              <div class="amount">{{ item.price * item.count }}元</div>
+              <div class="operate">
+                <button @click="handleDelete(index)"><img src="images/icon_trashcan.svg" alt=""></button>
+              </div>
+            </li>
+          </ul>
+          <div class="item_footer">
+            <button @click="showSmile">結帳</button>
+            <div class="total">總計<span>{{ totalAmount }}</span>元</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {
+            food: [
+              {
+                itemName: "中華彗星炒飯",
+                imgUrl: "images/1.png",
+                price: "200",
+                count: 1,
+              },
+              {
+                itemName: "奶油啤酒蛤蜊",
+                imgUrl: "images/2.png",
+                price: "200",
+                count: 1,
+              },
+              {
+                itemName: "滑嫩番茄蛋",
+                imgUrl: "images/3.png",
+                price: "200",
+                count: 1,
+              },
+              {
+                itemName: "泡椒炒鮮魚",
+                imgUrl: "images/4.png",
+                price: "200",
+                count: 1,
+              },
+              {
+                itemName: "生烤貝",
+                imgUrl: "images/5.png",
+                price: "200",
+                count: 1,
+              },
+            ],
+          };
+        },
+        computed: {
+          totalAmount() {
+            return this.food.reduce(
+              (total, item) => total + item.price * item.count,
+              0
+            );
+          }, 
+        },
+        methods: {
+          handlePlus(item) {
+            item.count++;
+          },
+          handleSub(item) {
+            if (item.count > 1) {
+              item.count--;
+            }
+          },
+          handleDelete(index) {
+            this.food[index].isDeleting = true;
+            setTimeout(() => {
+              this.food.splice(index, 1);
+            }, 400);
+          },
+          showSmile(){
+            
+          }
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
